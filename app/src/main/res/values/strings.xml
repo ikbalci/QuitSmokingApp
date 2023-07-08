@@ -6,4 +6,8 @@
     <string name="start_timer">Start Timer</string>
     <string name="stop_timer">Stop Timer</string>
     <string name="days_hours_minutes_seconds">Days&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Hours&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Minutes&#160;&#160;&#160;&#160;&#160;&#160;&#160;Seconds</string>
+    <string name="confirm_stop_timer">Are you sure you want to reset the timer?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_stop_timer_title">Confirm Reset</string>
 </resources>
