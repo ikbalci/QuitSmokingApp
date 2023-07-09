@@ -34,7 +34,8 @@
         app:layout_constraintEnd_toEndOf="@+id/quitNowText"
         app:layout_constraintStart_toStartOf="@+id/quitNowText"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.291" />
+        app:layout_constraintVertical_bias="0.291"
+        tools:ignore="VisualLintOverlap" />
 
     <TextView
         android:id="@+id/quitNowText"
@@ -57,10 +58,9 @@
         android:text="@string/start_timer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/timer"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="@+id/timer"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.546"
+        app:layout_constraintVertical_bias="0.506"
         tools:ignore="VisualLintOverlap" />
 
     <com.google.android.gms.ads.AdView
@@ -71,10 +71,10 @@
         app:adUnitId="ca-app-pub-9632175880255814/4732167792"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/stopTimerBtn"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintHorizontal_bias="0.479"
         app:layout_constraintStart_toStartOf="@+id/stopTimerBtn"
         app:layout_constraintTop_toBottomOf="@+id/startTimerBtn"
-        app:layout_constraintVertical_bias="0.782" />
+        app:layout_constraintVertical_bias="0.867" />
 
     <TextView
         android:id="@+id/timer"
@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.542"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pressButtonText"
+        app:layout_constraintTop_toTopOf="@+id/pressButtonText"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -97,10 +97,10 @@
         android:text="@string/stop_timer"
         app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="@+id/timerText"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="@+id/timerText"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.751" />
+        app:layout_constraintVertical_bias="0.682" />
 
     <TextView
         android:id="@+id/timerText"
@@ -117,5 +117,137 @@
         app:layout_constraintTop_toBottomOf="@+id/timer"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/txtOverallProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/overall_progress"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.211"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stopTimerBtn"
+        app:layout_constraintVertical_bias="0.135" />
+
+    <TextView
+        android:id="@+id/txtMoneySaved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/money_saved"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintEnd_toEndOf="@+id/moneySaved"
+        app:layout_constraintHorizontal_bias="0.651"
+        app:layout_constraintStart_toStartOf="@+id/moneySaved"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
+        app:layout_constraintVertical_bias="0.189" />
+
+    <TextView
+        android:id="@+id/txtDaysQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="@string/days_quit"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintEnd_toEndOf="@+id/daysQuit"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="@+id/daysQuit"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
+        app:layout_constraintVertical_bias="0.032" />
+
+    <TextView
+        android:id="@+id/txtAvoided"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/cigarettes_avoided"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintEnd_toEndOf="@+id/cigarettesAvoided"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="@+id/cigarettesAvoided"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
+        app:layout_constraintVertical_bias="0.189" />
+
+    <ImageView
+        android:id="@+id/cigarettesAvoidedIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/cigarettes_avoided"
+        app:layout_constraintBottom_toTopOf="@+id/txtAvoided"
+        app:layout_constraintStart_toEndOf="@+id/daysQuitIcon"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/cigarette"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/moneySavedIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="60dp"
+        android:contentDescription="@string/money_saved"
+        app:layout_constraintBottom_toTopOf="@+id/txtMoneySaved"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/money"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/daysQuitIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/days_quit"
+        app:layout_constraintBottom_toTopOf="@+id/txtDaysQuit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/cigarettesAvoided"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtAvoided"
+        app:layout_constraintEnd_toEndOf="@+id/cigarettesAvoidedIcon"
+        app:layout_constraintStart_toStartOf="@+id/cigarettesAvoidedIcon"
+        app:layout_constraintTop_toBottomOf="@+id/cigarettesAvoidedIcon"
+        app:layout_constraintVertical_bias="0.571" />
+
+    <TextView
+        android:id="@+id/daysQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtDaysQuit"
+        app:layout_constraintEnd_toEndOf="@+id/daysQuitIcon"
+        app:layout_constraintStart_toStartOf="@+id/daysQuitIcon"
+        app:layout_constraintTop_toBottomOf="@+id/daysQuitIcon" />
+
+    <TextView
+        android:id="@+id/moneySaved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtMoneySaved"
+        app:layout_constraintEnd_toEndOf="@+id/moneySavedIcon"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="@+id/moneySavedIcon"
+        app:layout_constraintTop_toBottomOf="@+id/moneySavedIcon"
+        app:layout_constraintVertical_bias="0.571" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

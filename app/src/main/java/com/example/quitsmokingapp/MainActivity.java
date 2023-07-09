@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,21 @@ public class MainActivity extends AppCompatActivity {
     private AdView adView;
     private TextView timerTextView;
     private TextView timer;
+    private TextView txtOverallProgress;
+    private TextView txtMoneySaved;
+    private ImageView moneySavedIcon;
+    private TextView moneySaved;
+    private int moneySavedValue;
+    private TextView txtDaysQuit;
+    private ImageView daysQuitIcon;
+    private TextView daysQuit;
+    private int daysQuitValue;
+    private TextView txtAvoided;
+    private ImageView cigarettesAvoidedIcon;
+    private TextView cigarettesAvoided;
+    private int cigarettesAvoidedValue;
+    private int cigarettesPerDay;
+    private int costPerCigarette;
     private TextView pressButtonText;
     private Button startTimerBtn;
     private Button stopTimerBtn;
@@ -45,6 +61,27 @@ public class MainActivity extends AppCompatActivity {
         startTime = timerPreferences.getLong("startTime", 0);
 
         timerTextView = findViewById(R.id.timerText);
+
+        txtOverallProgress = findViewById(R.id.txtOverallProgress);
+
+        txtDaysQuit = findViewById(R.id.txtDaysQuit);
+        daysQuitIcon = findViewById(R.id.daysQuitIcon);
+        daysQuit = findViewById(R.id.daysQuit);
+
+        txtAvoided = findViewById(R.id.txtAvoided);
+        cigarettesAvoidedIcon = findViewById(R.id.cigarettesAvoidedIcon);
+        cigarettesAvoided = findViewById(R.id.cigarettesAvoided);
+
+        txtMoneySaved = findViewById(R.id.txtMoneySaved);
+        moneySavedIcon = findViewById(R.id.moneySavedIcon);
+        moneySaved = findViewById(R.id.moneySaved);
+
+        daysQuitValue = seconds / 86400;
+        cigarettesAvoidedValue = (cigarettesPerDay / 24 ) * ((seconds % 86400) / 3600);
+        moneySavedValue = costPerCigarette * cigarettesAvoidedValue;
+        daysQuit.setText(String.valueOf(timerPreferences.getInt("daysQuit", daysQuitValue)));
+        cigarettesAvoided.setText(String.valueOf(timerPreferences.getInt("cigarettesAvoided", cigarettesAvoidedValue)));
+        moneySaved.setText(String.valueOf(timerPreferences.getInt("moneySaved", moneySavedValue)));
 
         pressButtonText = findViewById(R.id.pressButtonText);
 
@@ -111,6 +148,16 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setVisibility(View.VISIBLE);
         timer.setVisibility(View.VISIBLE);
         pressButtonText.setVisibility(View.INVISIBLE);
+        txtOverallProgress.setVisibility(View.VISIBLE);
+        txtMoneySaved.setVisibility(View.VISIBLE);
+        moneySavedIcon.setVisibility(View.VISIBLE);
+        moneySaved.setVisibility(View.VISIBLE);
+        txtAvoided.setVisibility(View.VISIBLE);
+        cigarettesAvoidedIcon.setVisibility(View.VISIBLE);
+        cigarettesAvoided.setVisibility(View.VISIBLE);
+        txtDaysQuit.setVisibility(View.VISIBLE);
+        daysQuitIcon.setVisibility(View.VISIBLE);
+        daysQuit.setVisibility(View.VISIBLE);
     }
 
     private void timerIsNotRunning() {
@@ -119,6 +166,16 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setVisibility(View.INVISIBLE);
         timer.setVisibility(View.INVISIBLE);
         pressButtonText.setVisibility(View.VISIBLE);
+        txtOverallProgress.setVisibility(View.INVISIBLE);
+        txtMoneySaved.setVisibility(View.INVISIBLE);
+        moneySavedIcon.setVisibility(View.INVISIBLE);
+        moneySaved.setVisibility(View.INVISIBLE);
+        txtAvoided.setVisibility(View.INVISIBLE);
+        cigarettesAvoidedIcon.setVisibility(View.INVISIBLE);
+        cigarettesAvoided.setVisibility(View.INVISIBLE);
+        txtDaysQuit.setVisibility(View.INVISIBLE);
+        daysQuitIcon.setVisibility(View.INVISIBLE);
+        daysQuit.setVisibility(View.INVISIBLE);
     }
 
     @Override

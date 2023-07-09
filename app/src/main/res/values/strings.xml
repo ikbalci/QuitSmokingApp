@@ -10,4 +10,8 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_stop_timer_title">Confirm Reset</string>
+    <string name="overall_progress">Overall Progress</string>
+    <string name="days_quit">days\nquit</string>
+    <string name="cigarettes_avoided">cigarettes\navoided</string>
+    <string name="money_saved">money\nsaved</string>
 </resources>
