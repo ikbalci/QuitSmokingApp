@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-                Toast.makeText(MainActivity.this, "Initialization completed.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "Initialization completed.", Toast.LENGTH_LONG).show();
             }
         });
 
