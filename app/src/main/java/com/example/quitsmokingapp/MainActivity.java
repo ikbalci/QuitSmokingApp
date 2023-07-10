@@ -4,13 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtMoneySaved;
     private ImageView moneySavedIcon;
     private TextView moneySaved;
-    private int moneySavedValue;
+    private double moneySavedValue;
     private TextView txtDaysQuit;
     private ImageView daysQuitIcon;
     private TextView daysQuit;
@@ -40,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtAvoided;
     private ImageView cigarettesAvoidedIcon;
     private TextView cigarettesAvoided;
-    private int cigarettesAvoidedValue;
+    private double cigarettesAvoidedValue;
     private int cigarettesPerDay;
-    private int costPerCigarette;
+    private float costPerCigarettePack;
     private TextView pressButtonText;
     private Button startTimerBtn;
     private Button stopTimerBtn;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private long startTime;
     private int seconds;
     private SharedPreferences timerPreferences;
+    private SharedPreferences dataPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         timerPreferences = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
+        dataPreferences = getSharedPreferences("DataPrefs", MODE_PRIVATE);
+
+        cigarettesPerDay = dataPreferences.getInt("cigarettesPerDay", 0);
+        costPerCigarettePack = dataPreferences.getFloat("costPerCigarettePack", 0);
+
         isRunning = timerPreferences.getBoolean("isRunning", false);
         startTime = timerPreferences.getLong("startTime", 0);
 
@@ -75,13 +83,6 @@ public class MainActivity extends AppCompatActivity {
         txtMoneySaved = findViewById(R.id.txtMoneySaved);
         moneySavedIcon = findViewById(R.id.moneySavedIcon);
         moneySaved = findViewById(R.id.moneySaved);
-
-        daysQuitValue = seconds / 86400;
-        cigarettesAvoidedValue = (cigarettesPerDay / 24 ) * ((seconds % 86400) / 3600);
-        moneySavedValue = costPerCigarette * cigarettesAvoidedValue;
-        daysQuit.setText(String.valueOf(timerPreferences.getInt("daysQuit", daysQuitValue)));
-        cigarettesAvoided.setText(String.valueOf(timerPreferences.getInt("cigarettesAvoided", cigarettesAvoidedValue)));
-        moneySaved.setText(String.valueOf(timerPreferences.getInt("moneySaved", moneySavedValue)));
 
         pressButtonText = findViewById(R.id.pressButtonText);
 
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
             long elapsedTime = System.currentTimeMillis() - startTime;
             seconds = (int) (elapsedTime / 1000);
             runTimer();
+        }else{
+            showCustomDialog();
         }
 
         // Initialize ads
@@ -140,6 +143,31 @@ public class MainActivity extends AppCompatActivity {
         adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
+    }
+
+    private void showCustomDialog() {
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_dialog);
+
+        final EditText cigarettesPerDayInput = dialog.findViewById(R.id.edtxCigarettesPerDay);
+        final EditText costPerCigarettePackInput = dialog.findViewById(R.id.edtxCostPerPack);
+        Button btnDialog = dialog.findViewById(R.id.btnDialog);
+
+        btnDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cigarettesPerDayInput.getText().toString().isEmpty() || costPerCigarettePackInput.getText().toString().isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
+                } else {
+                    cigarettesPerDay = Integer.parseInt(cigarettesPerDayInput.getText().toString());
+                    costPerCigarettePack = Float.parseFloat(costPerCigarettePackInput.getText().toString());
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
     }
 
     private void timerIsRunning() {
@@ -192,12 +220,21 @@ public class MainActivity extends AppCompatActivity {
         timerIsRunning();
         runTimer();
         saveTimerState();
+        saveDataValues();
     }
 
     private void stopTimer() {
         isRunning = false;
         timerIsNotRunning();
         saveTimerState();
+        saveDataValues();
+    }
+
+    private void saveDataValues() {
+        SharedPreferences.Editor editor = dataPreferences.edit();
+        editor.putInt("cigarettesPerDay", cigarettesPerDay);
+        editor.putFloat("costPerCigarettePack", costPerCigarettePack);
+        editor.apply();
     }
 
     private void saveTimerState() {
@@ -223,6 +260,19 @@ public class MainActivity extends AppCompatActivity {
 
                 String time = String.format(Locale.getDefault(), "%02d:%02d:%02d:%02d", days, hours, minutes, secs);
                 timer.setText(time);
+
+                // Overall Progress
+                daysQuitValue = days;
+                cigarettesAvoidedValue = (cigarettesPerDay/24.0f) * (seconds/3600.0f);
+                moneySavedValue = cigarettesAvoidedValue * (costPerCigarettePack/20.0);
+
+                String daysQuitValueString = String.valueOf(daysQuitValue);
+                String cigarettesAvoidedValueString = String.format(Locale.getDefault(), "%.0f", cigarettesAvoidedValue);
+                String moneySavedValueString = String.format(Locale.getDefault(), "₺%.2f", moneySavedValue);
+
+                daysQuit.setText(daysQuitValueString);
+                cigarettesAvoided.setText(cigarettesAvoidedValueString);
+                moneySaved.setText(moneySavedValueString);
 
                 if (isRunning) {
                     handler.postDelayed(this, 1000);

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:text="@string/please_enter_how_many_cigarettes_you_smoke_per_day_and_the_cost_of_a_cigarette_pack"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edtxCigarettesPerDay"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:ems="10"
+        android:hint="@string/cigarettes_per_day"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:minHeight="48dp"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/edtxCostPerPack"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:ems="10"
+        android:hint="@string/cost_of_a_cigarette_pack"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:textAlignment="textStart"
+        tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/btnDialog"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="7dp"
+        android:text="@string/confirm" />
+</LinearLayout>

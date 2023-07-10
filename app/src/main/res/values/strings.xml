@@ -14,4 +14,8 @@
     <string name="days_quit">days\nquit</string>
     <string name="cigarettes_avoided">cigarettes\navoided</string>
     <string name="money_saved">money\nsaved</string>
+    <string name="please_enter_how_many_cigarettes_you_smoke_per_day_and_the_cost_of_a_cigarette_pack">Please enter how many cigarettes you smoke per day and the cost of a cigarette pack:</string>
+    <string name="cost_of_a_cigarette_pack">cost of a cigarette pack (₺)</string>
+    <string name="button">Button</string>
+    <string name="cigarettes_per_day">cigarettes per day</string>
 </resources>
