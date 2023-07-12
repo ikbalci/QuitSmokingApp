@@ -1,4 +1,4 @@
-package com.example.quitsmokingapp;
+package com.kenanb.quitsmokingapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private AdView adView;
     private TextView timerTextView;
     private TextView timer;
-    private TextView txtOverallProgress;
     private TextView txtMoneySaved;
     private ImageView moneySavedIcon;
     private TextView moneySaved;
@@ -69,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         startTime = timerPreferences.getLong("startTime", 0);
 
         timerTextView = findViewById(R.id.timerText);
-
-        txtOverallProgress = findViewById(R.id.txtOverallProgress);
 
         txtDaysQuit = findViewById(R.id.txtDaysQuit);
         daysQuitIcon = findViewById(R.id.daysQuitIcon);
@@ -176,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setVisibility(View.VISIBLE);
         timer.setVisibility(View.VISIBLE);
         pressButtonText.setVisibility(View.INVISIBLE);
-        txtOverallProgress.setVisibility(View.VISIBLE);
         txtMoneySaved.setVisibility(View.VISIBLE);
         moneySavedIcon.setVisibility(View.VISIBLE);
         moneySaved.setVisibility(View.VISIBLE);
@@ -194,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setVisibility(View.INVISIBLE);
         timer.setVisibility(View.INVISIBLE);
         pressButtonText.setVisibility(View.VISIBLE);
-        txtOverallProgress.setVisibility(View.INVISIBLE);
         txtMoneySaved.setVisibility(View.INVISIBLE);
         moneySavedIcon.setVisibility(View.INVISIBLE);
         moneySaved.setVisibility(View.INVISIBLE);

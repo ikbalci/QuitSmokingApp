@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:adUnitId="ca-app-pub-9632175880255814/4732167792"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/stopTimerBtn"
         app:layout_constraintHorizontal_bias="0.479"
@@ -118,17 +118,31 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="TextSizeCheck" />
 
-    <TextView
-        android:id="@+id/txtOverallProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/overall_progress"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/adView"
+    <ImageView
+        android:id="@+id/cigarettesAvoidedIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="44dp"
+        android:contentDescription="@string/cigarettes_avoided"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stopTimerBtn"
-        app:layout_constraintVertical_bias="0.135" />
+        app:srcCompat="@drawable/cigarette"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/daysQuitIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="44dp"
+        android:contentDescription="@string/days_quit"
+        app:layout_constraintEnd_toStartOf="@+id/cigarettesAvoidedIcon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stopTimerBtn"
+        app:srcCompat="@drawable/calendar" />
 
     <TextView
         android:id="@+id/txtMoneySaved"
@@ -139,10 +153,24 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/txtAvoided"
         app:layout_constraintEnd_toEndOf="@+id/moneySaved"
-        app:layout_constraintHorizontal_bias="0.558"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/moneySaved"
         app:layout_constraintTop_toBottomOf="@+id/moneySavedIcon"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/moneySavedIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="60dp"
+        android:contentDescription="@string/money_saved"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cigarettesAvoidedIcon"
+        app:layout_constraintTop_toBottomOf="@+id/stopTimerBtn"
+        app:srcCompat="@drawable/money"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/txtDaysQuit"
@@ -158,18 +186,6 @@
         app:layout_constraintTop_toBottomOf="@+id/daysQuitIcon"
         app:layout_constraintVertical_bias="1.0" />
 
-    <ImageView
-        android:id="@+id/cigarettesAvoidedIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/cigarettes_avoided"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
-        app:srcCompat="@drawable/cigarette"
-        tools:ignore="ImageContrastCheck" />
-
     <TextView
         android:id="@+id/txtAvoided"
         android:layout_width="wrap_content"
@@ -179,37 +195,10 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="@+id/cigarettesAvoided"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="@+id/cigarettesAvoided"
         app:layout_constraintTop_toBottomOf="@+id/cigarettesAvoidedIcon"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ImageView
-        android:id="@+id/moneySavedIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="60dp"
-        android:contentDescription="@string/money_saved"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cigarettesAvoidedIcon"
-        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
-        app:srcCompat="@drawable/money"
-        tools:ignore="ImageContrastCheck" />
-
-    <ImageView
-        android:id="@+id/daysQuitIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/days_quit"
-        app:layout_constraintEnd_toStartOf="@+id/cigarettesAvoidedIcon"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOverallProgress"
-        app:srcCompat="@drawable/calendar" />
+        app:layout_constraintVertical_bias="0.014" />
 
     <TextView
         android:id="@+id/cigarettesAvoided"

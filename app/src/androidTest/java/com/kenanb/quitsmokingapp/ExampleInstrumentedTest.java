@@ -1,4 +1,4 @@
-package com.example.quitsmokingapp;
+package com.kenanb.quitsmokingapp;
 
 import android.content.Context;
 

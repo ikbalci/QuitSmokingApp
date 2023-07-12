@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.quitsmokingapp'
+    namespace 'com.kenanb.quitsmokingapp'
     compileSdk 33
 
     defaultConfig {
