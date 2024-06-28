@@ -27,89 +27,85 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    private enum TimerState {
+        RUNNING, NOT_RUNNING
+    }
+
     private AdView adView;
-    private TextView timerTextView;
-    private TextView timer;
-    private TextView txtMoneySaved;
-    private ImageView moneySavedIcon;
-    private TextView moneySaved;
-    private double moneySavedValue;
-    private TextView txtDaysQuit;
-    private ImageView daysQuitIcon;
-    private TextView daysQuit;
-    private int daysQuitValue;
-    private TextView txtAvoided;
-    private ImageView cigarettesAvoidedIcon;
-    private TextView cigarettesAvoided;
-    private double cigarettesAvoidedValue;
-    private int cigarettesPerDay;
+    private TextView timerTextView, timer, txtMoneySaved, moneySaved, txtDaysQuit, daysQuit, txtAvoided, cigarettesAvoided, pressButtonText;
+    private ImageView moneySavedIcon, daysQuitIcon, cigarettesAvoidedIcon;
+    private Button startTimerBtn, stopTimerBtn;
+
+    private double moneySavedValue, cigarettesAvoidedValue;
+    private int daysQuitValue, cigarettesPerDay, seconds;
     private float costPerCigarettePack;
-    private TextView pressButtonText;
-    private Button startTimerBtn;
-    private Button stopTimerBtn;
     private boolean isRunning;
     private long startTime;
-    private int seconds;
-    private SharedPreferences timerPreferences;
-    private SharedPreferences dataPreferences;
+
+    private SharedPreferences timerPreferences, dataPreferences;
+    private TimerState timerState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initViews();
+        loadPreferences();
+
+        if (isRunning) {
+            resumeTimer();
+        } else {
+            showCustomDialog();
+        }
+
+        setupAds();
+        setupListeners();
+    }
+
+    private void initViews() {
         timerPreferences = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
         dataPreferences = getSharedPreferences("DataPrefs", MODE_PRIVATE);
 
-        cigarettesPerDay = dataPreferences.getInt("cigarettesPerDay", 0);
-        costPerCigarettePack = dataPreferences.getFloat("costPerCigarettePack", 0);
-
-        isRunning = timerPreferences.getBoolean("isRunning", false);
-        startTime = timerPreferences.getLong("startTime", 0);
-
         timerTextView = findViewById(R.id.timerText);
-
-        txtDaysQuit = findViewById(R.id.txtDaysQuit);
-        daysQuitIcon = findViewById(R.id.daysQuitIcon);
-        daysQuit = findViewById(R.id.daysQuit);
-
-        txtAvoided = findViewById(R.id.txtAvoided);
-        cigarettesAvoidedIcon = findViewById(R.id.cigarettesAvoidedIcon);
-        cigarettesAvoided = findViewById(R.id.cigarettesAvoided);
-
+        timer = findViewById(R.id.timer);
         txtMoneySaved = findViewById(R.id.txtMoneySaved);
         moneySavedIcon = findViewById(R.id.moneySavedIcon);
         moneySaved = findViewById(R.id.moneySaved);
-
+        txtDaysQuit = findViewById(R.id.txtDaysQuit);
+        daysQuitIcon = findViewById(R.id.daysQuitIcon);
+        daysQuit = findViewById(R.id.daysQuit);
+        txtAvoided = findViewById(R.id.txtAvoided);
+        cigarettesAvoidedIcon = findViewById(R.id.cigarettesAvoidedIcon);
+        cigarettesAvoided = findViewById(R.id.cigarettesAvoided);
         pressButtonText = findViewById(R.id.pressButtonText);
-
-        timer = findViewById(R.id.timer);
-
         startTimerBtn = findViewById(R.id.startTimerBtn);
-
         stopTimerBtn = findViewById(R.id.stopTimerBtn);
+    }
 
-        stopTimerBtn.setOnClickListener(new View.OnClickListener() {
+    private void loadPreferences() {
+        cigarettesPerDay = dataPreferences.getInt("cigarettesPerDay", 0);
+        costPerCigarettePack = dataPreferences.getFloat("costPerCigarettePack", 0);
+        isRunning = timerPreferences.getBoolean("isRunning", false);
+        startTime = timerPreferences.getLong("startTime", 0);
+
+        timerState = isRunning ? TimerState.RUNNING : TimerState.NOT_RUNNING;
+        updateUI();
+    }
+
+    private void setupAds() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage(R.string.confirm_stop_timer)
-                        .setTitle(R.string.confirm_stop_timer_title)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                stopTimer();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // do nothing
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+                // Initialization completed.
             }
         });
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
 
+    private void setupListeners() {
         startTimerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,29 +113,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        timerIsNotRunning();
-
-        // Restore the timer state
-        if (isRunning) {
-            timerIsRunning();
-            long elapsedTime = System.currentTimeMillis() - startTime;
-            seconds = (int) (elapsedTime / 1000);
-            runTimer();
-        }else{
-            showCustomDialog();
-        }
-
-        // Initialize ads
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+        stopTimerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-                //Toast.makeText(MainActivity.this, "Initialization completed.", Toast.LENGTH_LONG).show();
+            public void onClick(View view) {
+                showStopTimerConfirmation();
             }
         });
+    }
 
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+    private void showStopTimerConfirmation() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(R.string.confirm_stop_timer)
+                .setTitle(R.string.confirm_stop_timer_title)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        stopTimer();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create()
+                .show();
     }
 
     private void showCustomDialog() {
@@ -167,38 +160,23 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void timerIsRunning() {
-        startTimerBtn.setVisibility(View.INVISIBLE);
-        stopTimerBtn.setVisibility(View.VISIBLE);
-        timerTextView.setVisibility(View.VISIBLE);
-        timer.setVisibility(View.VISIBLE);
-        pressButtonText.setVisibility(View.INVISIBLE);
-        txtMoneySaved.setVisibility(View.VISIBLE);
-        moneySavedIcon.setVisibility(View.VISIBLE);
-        moneySaved.setVisibility(View.VISIBLE);
-        txtAvoided.setVisibility(View.VISIBLE);
-        cigarettesAvoidedIcon.setVisibility(View.VISIBLE);
-        cigarettesAvoided.setVisibility(View.VISIBLE);
-        txtDaysQuit.setVisibility(View.VISIBLE);
-        daysQuitIcon.setVisibility(View.VISIBLE);
-        daysQuit.setVisibility(View.VISIBLE);
-    }
+    private void updateUI() {
+        boolean isRunning = timerState == TimerState.RUNNING;
 
-    private void timerIsNotRunning() {
-        startTimerBtn.setVisibility(View.VISIBLE);
-        stopTimerBtn.setVisibility(View.INVISIBLE);
-        timerTextView.setVisibility(View.INVISIBLE);
-        timer.setVisibility(View.INVISIBLE);
-        pressButtonText.setVisibility(View.VISIBLE);
-        txtMoneySaved.setVisibility(View.INVISIBLE);
-        moneySavedIcon.setVisibility(View.INVISIBLE);
-        moneySaved.setVisibility(View.INVISIBLE);
-        txtAvoided.setVisibility(View.INVISIBLE);
-        cigarettesAvoidedIcon.setVisibility(View.INVISIBLE);
-        cigarettesAvoided.setVisibility(View.INVISIBLE);
-        txtDaysQuit.setVisibility(View.INVISIBLE);
-        daysQuitIcon.setVisibility(View.INVISIBLE);
-        daysQuit.setVisibility(View.INVISIBLE);
+        startTimerBtn.setVisibility(isRunning ? View.INVISIBLE : View.VISIBLE);
+        stopTimerBtn.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        timerTextView.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        timer.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        pressButtonText.setVisibility(isRunning ? View.INVISIBLE : View.VISIBLE);
+        txtMoneySaved.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        moneySavedIcon.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        moneySaved.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        txtAvoided.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        cigarettesAvoidedIcon.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        cigarettesAvoided.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        txtDaysQuit.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        daysQuitIcon.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
+        daysQuit.setVisibility(isRunning ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -210,17 +188,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTimer() {
+        timerState = TimerState.RUNNING;
         isRunning = true;
         startTime = System.currentTimeMillis();
-        timerIsRunning();
+        updateUI();
         runTimer();
         saveTimerState();
         saveDataValues();
     }
 
     private void stopTimer() {
+        timerState = TimerState.NOT_RUNNING;
         isRunning = false;
-        timerIsNotRunning();
+        updateUI();
         saveTimerState();
         saveDataValues();
     }
@@ -241,33 +221,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void runTimer() {
         final Handler handler = new Handler();
-
         handler.post(new Runnable() {
             @Override
             public void run() {
                 long elapsedTime = System.currentTimeMillis() - startTime;
-                int seconds = (int) (elapsedTime / 1000);
+                seconds = (int) (elapsedTime / 1000);
 
                 int days = seconds / 86400;
                 int hours = (seconds % 86400) / 3600;
                 int minutes = (seconds % 3600) / 60;
                 int secs = seconds % 60;
 
-                String time = String.format(Locale.getDefault(), "%02d:%02d:%02d:%02d", days, hours, minutes, secs);
-                timer.setText(time);
+                timer.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d:%02d", days, hours, minutes, secs));
 
-                // Overall Progress
                 daysQuitValue = days;
-                cigarettesAvoidedValue = (cigarettesPerDay/24.0f) * (seconds/3600.0f);
-                moneySavedValue = cigarettesAvoidedValue * (costPerCigarettePack/20.0);
+                cigarettesAvoidedValue = (cigarettesPerDay / 24.0f) * (seconds / 3600.0f);
+                moneySavedValue = cigarettesAvoidedValue * (costPerCigarettePack / 20.0);
 
-                String daysQuitValueString = String.valueOf(daysQuitValue);
-                String cigarettesAvoidedValueString = String.format(Locale.getDefault(), "%.0f", cigarettesAvoidedValue);
-                String moneySavedValueString = String.format(Locale.getDefault(), "₺%.2f", moneySavedValue);
-
-                daysQuit.setText(daysQuitValueString);
-                cigarettesAvoided.setText(cigarettesAvoidedValueString);
-                moneySaved.setText(moneySavedValueString);
+                daysQuit.setText(String.valueOf(daysQuitValue));
+                cigarettesAvoided.setText(String.format(Locale.getDefault(), "%.0f", cigarettesAvoidedValue));
+                moneySaved.setText(String.format(Locale.getDefault(), "₺%.2f", moneySavedValue));
 
                 if (isRunning) {
                     handler.postDelayed(this, 1000);
@@ -275,5 +248,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-}
 
+    private void resumeTimer() {
+        long elapsedTime = System.currentTimeMillis() - startTime;
+        seconds = (int) (elapsedTime / 1000);
+        runTimer();
+        updateUI();
+    }
+}
